@@ -19,6 +19,7 @@ type Config struct {
 	Srv               bool           `json:"srv"`
 	ServerRAM         uint           `json:"server_ram"`
 	MaxThreads        int            `json:"max_threads"`
+	MaxChunkSize      int            `json:"max_chunk_size"`
 	Database          string         `json:"database"`
 	DefaultMode       types.SyncMode `json:"default_mode"`
 	RetryCount        int            `json:"backoff_retry_count"`
@@ -32,6 +33,11 @@ func (c *Config) URI() string {
 		// set default threads
 		logger.Info("setting max threads to default[10]")
 		c.MaxThreads = 10
+	}
+	if c.MaxChunkSize == 0 {
+		// set default chunk size
+		logger.Info("setting max chunk size to default[1024]")
+		c.MaxChunkSize = 1024
 	}
 	if c.Srv {
 		connectionPrefix = "mongodb+srv"
